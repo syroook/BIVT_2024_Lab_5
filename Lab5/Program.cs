@@ -14,13 +14,21 @@ public class Program
     public static void Main()
     {
         Program program = new Program();
-        int[,] matrix = new int[,] {
-            { 1, 2, 3, 4 },
-            { 5, -5, 5, -5 },
-            { 6, 7, 8, 9 },
-            { -6, -5, -8, 0 }};
-        program.Task_3_13(ref matrix);
-        program.Print(matrix);
+        int[,] matrix1 = new int[,] {
+            { 1, 2, 3, 4, 5 },
+            { 6, 7, 8, 9, 10 },
+            { -1, -2, -3, -4, -5 },
+            { 6, 7, 8, 9, 0 }};
+        int[,] matrix2 = new int[5, 6] {
+            { 1, 2, 3, 4, 5, -1 },
+            { 6, 7, 8, 9, 10, -2 },
+            { 11, 12, 13, 14, 15, -3 },
+            { -1, -2, -3, -4, -5, -1 },
+            { 1, 3, 3, 1, 5, 5 }};
+        program.Task_2_3(ref matrix1, ref matrix2);
+        program.Print(matrix1);
+        Console.WriteLine();
+        program.Print(matrix2);
     }
     public void Print(int[,] matrix)
     {
@@ -194,31 +202,53 @@ public class Program
     {
         // code here
         //  create and use method FindDiagonalMaxIndex(matrix);
-        int[,] new_b = new int[B.GetLength(0) - 1, B.GetLength(1)];
-        int[,] new_c = new int[C.GetLength(0) - 1, C.GetLength(1)];
-        for (int i = 0; i < new_b.GetLength(0); i++)
-        {
-            for (int j = 0; j < B.GetLength(1); j++)
-            {
-                if (i < FindDiagonalMaxIndex(B))
-                    new_b[i, j] = B[i, j];
-                else
-                    new_b[i, j] = B[i + 1, j];
-            }
-        }
-        for (int i = 0; i < new_c.GetLength(0); i++)
-        {
-            for (int j = 0; j < C.GetLength(1); j++)
-            {
-                if (i < FindDiagonalMaxIndex(C))
-                    new_c[i, j] = C[i, j];
-                else
-                    new_c[i, j] = C[i + 1, j];
-            }
-        }
-        B = new_b;
-        C = new_c;
+        //int[,] new_b = new int[B.GetLength(0) - 1, B.GetLength(1)];
+        //int[,] new_c = new int[C.GetLength(0) - 1, C.GetLength(1)];
+        //for (int i = 0; i < new_b.GetLength(0); i++)
+        //{
+        //    for (int j = 0; j < B.GetLength(1); j++)
+        //    {
+        //        if (i < FindDiagonalMaxIndex(B))
+        //            new_b[i, j] = B[i, j];
+        //        else
+        //            new_b[i, j] = B[i + 1, j];
+        //    }
+        //}
+        //for (int i = 0; i < new_c.GetLength(0); i++)
+        //{
+        //    for (int j = 0; j < C.GetLength(1); j++)
+        //    {
+        //        if (i < FindDiagonalMaxIndex(C))
+        //            new_c[i, j] = C[i, j];
+        //        else
+        //            new_c[i, j] = C[i + 1, j];
+        //    }
+        //}
+        //B = new_b;
+        //C = new_c;
+        int indexB=FindDiagonalMaxIndex(B);
+        int indexC=FindDiagonalMaxIndex(C);
+        AdditionalMethodDRYForRemovingRows(ref B, indexB);
+        AdditionalMethodDRYForRemovingRows(ref C, indexC);
+
         // end
+    }
+    public void AdditionalMethodDRYForRemovingRows(ref int[,] matrix, int index)
+    {
+        int[,] new_matrix = new int[matrix.GetLength(0) - 1, matrix.GetLength(1)];
+        for (int i = 0; i < new_matrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrix.GetLength(1); j++)
+            {
+                if ( i < index)
+                    new_matrix[i, j] = matrix[i, j];
+                else
+                {
+                    new_matrix[i, j] = matrix[i+1, j];
+                }
+            }
+        }
+        matrix = new_matrix;
     }
 
     public int FindDiagonalMaxIndex(int[,] matrix)
@@ -973,41 +1003,61 @@ public class Program
     public void Task_2_27(int[,] A, int[,] B)
     {
         // code here
-        int columnIndex_A, columnIndex_B;
-        int len_a = A.GetLength(0);
-        int len_b = B.GetLength(0);
-        for (int i = 0; i < len_a; i++)
-        {
-            if (i % 2 != 0)
-            {
-                FindRowMaxIndex(ref A, i, out columnIndex_A);
-                ReplaceMaxElementEven(ref A, i, columnIndex_A);
-            }
-            else
-            {
-                FindRowMaxIndex(ref A, i, out columnIndex_A);
-                ReplaceMaxElementOdd(ref A, i, columnIndex_A);
-            }
-        }
+        //int columnIndex_A, columnIndex_B;
+        //int len_a = A.GetLength(0);
+        //int len_b = B.GetLength(0);
+        //for (int i = 0; i < len_a; i++)
+        //{
+        //    if (i % 2 != 0)
+        //    {
+        //        FindRowMaxIndex(ref A, i, out columnIndex_A);
+        //        ReplaceMaxElementEven(ref A, i, columnIndex_A);
+        //    }
+        //    else
+        //    {
+        //        FindRowMaxIndex(ref A, i, out columnIndex_A);
+        //        ReplaceMaxElementOdd(ref A, i, columnIndex_A);
+        //    }
+        //}
 
-        for (int i = 0; i < len_b; i++)
-        {
-            if (i % 2 != 0)
-            {
-                FindRowMaxIndex(ref B, i, out columnIndex_B);
-                ReplaceMaxElementEven(ref B, i, columnIndex_B);
-            }
-            else
-            {
-                FindRowMaxIndex(ref B, i, out columnIndex_B);
-                ReplaceMaxElementOdd(ref B, i, columnIndex_B);
-            }
-        }
+        //for (int i = 0; i < len_b; i++)
+        //{
+        //    if (i % 2 != 0)
+        //    {
+        //        FindRowMaxIndex(ref B, i, out columnIndex_B);
+        //        ReplaceMaxElementEven(ref B, i, columnIndex_B);
+        //    }
+        //    else
+        //    {
+        //        FindRowMaxIndex(ref B, i, out columnIndex_B);
+        //        ReplaceMaxElementOdd(ref B, i, columnIndex_B);
+        //    }
+        //}
+
+        AdditionalMethodDRYForTask_2_27(ref B);
+        AdditionalMethodDRYForTask_2_27(ref A);
         // create and use FindRowMaxIndex(matrix, rowIndex, out columnIndex);
         // create and use ReplaceMaxElementOdd(matrix, row, column);
         // create and use ReplaceMaxElementEven(matrix, row, column);
 
         // end
+    }
+    public void AdditionalMethodDRYForTask_2_27(ref int[,] matrix)
+    {
+        int columnIndex;
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            if (i % 2 != 0)
+            {
+                FindRowMaxIndex(ref matrix, i, out columnIndex);
+                ReplaceMaxElementEven(ref matrix, i, columnIndex);
+            }
+            else
+            {
+                FindRowMaxIndex(ref matrix, i, out columnIndex);
+                ReplaceMaxElementOdd(ref matrix, i, columnIndex);
+            }
+        }
     }
     public void FindRowMaxIndex(ref int[,] matrix, int rowIndex, out int columnIndex)
     {
